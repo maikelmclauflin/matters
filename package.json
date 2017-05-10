@@ -1,0 +1,11 @@
+{
+    "name": "matter",
+    "version": "1.0.0",
+    "description": "generalized equality differ",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Michael McLaughlin <michael@gospecless.com> (https://gospecless.com)",
+    "license": "MIT"
+}
