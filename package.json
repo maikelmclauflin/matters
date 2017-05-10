@@ -1,12 +1,12 @@
 {
-    "name": "matters",
-    "version": "1.0.2",
-    "description": "generalized equality differ",
-    "main": "index.js",
-    "scripts": {
-        "test": "nodemon test.js",
-        "share": "npm version patch && git push && npm publish"
-    },
-    "author": "Michael McLaughlin <michael@gospecless.com> (https://gospecless.com)",
-    "license": "MIT"
+  "name": "matters",
+  "version": "1.0.3",
+  "description": "generalized equality differ",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon test.js",
+    "share": "npm version patch && git push && npm publish"
+  },
+  "author": "Michael McLaughlin <michael@gospecless.com> (https://gospecless.com)",
+  "license": "MIT"
 }
