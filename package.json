@@ -1,5 +1,5 @@
 {
-  "name": "matters",
+  "name": "@timelaps/matters",
   "version": "1.0.3",
   "description": "generalized equality differ",
   "main": "index.js",
@@ -7,6 +7,6 @@
     "test": "nodemon test.js",
     "share": "npm version patch && git push && npm publish"
   },
-  "author": "Michael McLaughlin <michael@gospecless.com> (https://gospecless.com)",
+  "author": "Michael McLaughlin <michael.j.mclaughlin20@gmail.com>",
   "license": "MIT"
 }

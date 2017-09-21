@@ -5,6 +5,10 @@ var BRACKET_OBJECT_SPACE = '[object ';
 var CONSTRUCTOR = 'constructor';
 var objectToString = {}.toString;
 
+function keys(obj) {
+    return isObject(obj) ? (nativeKeys ? nativeKeys(obj) : collectKeys(obj)) : [];
+}
+
 function matter(a, b, limit) {
     return matters(a, b, {
         total: 0,
@@ -19,7 +23,7 @@ function matter(a, b, limit) {
     });
 }
 
-function forEach(array, fn, memo) {
+function reduce(array, fn, memo) {
     var result, i = 0;
     for (; i < array.length; i++) {
         result = fn(memo, array[i], i, array);
@@ -82,7 +86,7 @@ function toNumber(a) {
 
 function each(obj, fn, memo) {
     var kys = keys(obj);
-    return forEach(array, function (memo, key, index, array) {
+    return reduce(array, function (memo, key, index, array) {
         return fn(memo, obj[key], key, obj);
     }, memo);
 }
@@ -148,26 +152,53 @@ function arrayDiff(a, b, diffs, push) {
             original: a.length,
             current: b.length
         });
-    } else {
-        // forEach(a, function (memo, item, index) {
-        //     collectDiffsUnder(item, b[index], diffs);
-        // });
     }
+    reduce(a, function (memo, item, index) {
+        collectDiffsUnder(item, b[index], diffs);
+    });
 }
 
 function objectDiff() {}
 
+function numberDiff(a, b, diffs, push) {
+    if (a !== b) {
+        push({
+            type: 'number',
+            a: a + '',
+            b: b + ''
+        });
+    }
+}
+
+function functionDiff(a, b, diffs, push) {
+    var sameCode, aString, bString;
+    if (a !== b) {
+        push({
+            type: 'function',
+            a: a,
+            b: b,
+            sameCode: aString === bString,
+            strings: {
+                a: a + '',
+                b: b + '',
+            }
+        });
+    }
+}
+
 function collectDiffsUnder(a, b, diffs) {
     var typea, typeb, typesame, differences, indexA, indexB, continues, characterA, characterB,
         differenceObject, differencesList;
-    if (diffs.total < diffs.limit) {
+    if (a !== b && diffs.total < diffs.limit) {
         typea = toString.call(a);
         typeb = toString.call(b);
-        typesame = typea == typeb;
+        typesame = typea === typeb;
         differencesList = [];
         if (typesame) {
-            if (typeOfCalled(typea, 'Number') || typeOfCalled(typea, 'Function')) {
-                // return;
+            if (typeOfCalled(typea, 'Function')) {
+                functionDiff(a, b, diffs, push);
+            } else if (typeOfCalled(typea, 'Number')) {
+                numberDiff(a, b, diffs, push);
             } else if (typeOfCalled(typea, 'String')) {
                 // differences in the string
                 stringDiff(a, b, diffs, push);
@@ -176,26 +207,34 @@ function collectDiffsUnder(a, b, diffs) {
             } else if (typeOfCalled(typea, 'Object')) {
                 objectDiff(a, b, diff, push);
             }
+        } else {
+            push({
+                differentType: true,
+                a: a,
+                b: b
+            });
         }
     }
     return diffs;
 
     function push(obj) {
-        differencesList.push(obj);
-        if (!typesame) {
-            return;
-        }
-        differences = {
-            typesame: typesame,
-            typea: typea,
-            typeb: typeb,
-            a: a,
-            b: b,
-            deltas: differencesList
-        };
-        typesame = false;
-        diffs.push(differences);
+        differencesList.push(merge({
+            differentType: false
+        }, obj));
     }
+}
+
+function forOwn(a, fn) {
+    reduce(keys(a), function (memo, key) {
+        fn(a[key], key, a);
+    });
+}
+
+function merge(a, b) {
+    forOwn(b, function (value, key) {
+        a[key] = value;
+    });
+    return a;
 }
 
 function isEqual(a, b) {
