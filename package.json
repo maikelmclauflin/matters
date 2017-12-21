@@ -1,6 +1,6 @@
 {
   "name": "@timelaps/matters",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "generalized equality differ",
   "main": "index.js",
   "scripts": {
