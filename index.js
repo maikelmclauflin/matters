@@ -1,9 +1,10 @@
 module.exports = matter;
 var isArray = Array.isArray;
-var nativeKeys = Object.keys;
+var OBJECT = Object;
+var nativeKeys = OBJECT.keys;
 var BRACKET_OBJECT_SPACE = '[object ';
 var CONSTRUCTOR = 'constructor';
-var objectToString = {}.toString;
+var objectToString = OBJECT.prototype.toString;
 
 function keys(obj) {
     return isObject(obj) ? (nativeKeys ? nativeKeys(obj) : collectKeys(obj)) : [];
