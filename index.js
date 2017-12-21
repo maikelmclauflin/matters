@@ -191,8 +191,8 @@ function collectDiffsUnder(a, b, diffs) {
     var typea, typeb, typesame, differences, indexA, indexB, continues, characterA, characterB,
         differenceObject, differencesList;
     if (a !== b && diffs.total < diffs.limit) {
-        typea = toString.call(a);
-        typeb = toString.call(b);
+        typea = objectToString.call(a);
+        typeb = objectToString.call(b);
         typesame = typea === typeb;
         differencesList = [];
         if (typesame) {
